@@ -13,7 +13,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # Third party apps
+    "api",
     "rest_framework",
+    "djoser",
+    "oauth2_provider",
+    "social_django",
+    "rest_framework_social_oauth2",
 
     # Local apps
 ]
@@ -62,6 +67,26 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT"),
     }
 }
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', 
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ]
+}
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.vk.VKOAuth2',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+SOCIAL_AUTH_VK_KEY = os.getenv("AUTH_VK_KEY")
+SOCIAL_AUTH_VK_SECRET = os.getenv("AUTH_VK_SECRET")
 
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
